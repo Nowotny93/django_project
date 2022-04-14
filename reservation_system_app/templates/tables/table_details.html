@@ -1,0 +1,114 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+    <div>
+        <h1 class="text-center" style="font-family: 'Monaco';font-style: italic"><b>-- Table details --</b></h1>
+    </div>
+    <hr>
+    <div style="display: flex;position: relative;top: 30px">
+        <div class="row">
+
+                <div class="col-lg-4">
+                    <div class="card" style="width: 190%">
+                        <div class="card-body">
+
+                                <h4 class="card-title" style="text-align: center;font-family: Monaco; font-style: italic"><b>Name: {{ table.name }}</b></h4>
+                                <h5 class="card-title" style="text-align: center;font-family: Monaco; font-style: italic">Type: {{ table.type }}, {{ table.description }}</h5>
+
+                                {% if table.type == 'Big' %}
+                                    <img src="https://5.imimg.com/data5/OJ/OG/ND/SELLER-53513676/dining-room-table-500x500.jpg" style="text-align: center;width: 90%;display: block;margin-left: auto;margin-right: auto">
+                                {% elif table.type == 'Medium' %}
+                                    <img src="https://www.decorhubng.com/wp-content/uploads/2018/05/Espresso-Leather-Brown-4-Person-Table-and-Chairs-Brown-Dining-Dinette.jpg" style="text-align: center;width: 90%;display: block;margin-left: auto;margin-right: auto">
+                                {% elif table.type == 'Small' %}
+                                    <img src="https://i5.walmartimages.com/asr/cd57a361-89eb-4455-a40a-3788fb3effd8.bea507cfe007bed07a856f0b603d7d7c.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF" style="text-align: center;width: 90%;display: block;margin-left: auto;margin-right: auto">
+                                {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        {% if orders %}
+                            <h5>RESERVED</h5>
+                        {% else %}
+                            <h5>FREE</h5>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="{% url 'delete all orders' table.id %}" class="btn btn-danger">Clear the table</a>
+                    </div>
+                    <div class="box">
+                        <form method="post" action="{% url 'make order' table.id %}">
+                            {% csrf_token %}
+                            {{ make_order_form }}
+                            <button class="btn btn-primary mt-2" type="submit">Make Order</button>
+                        </form>
+                    </div>
+                </div>
+        </div>
+
+        <!--<div class="row">
+          <div class="col-xs-5">
+            <select name="from[]" id="multiselect" class="form-control" size="8" multiple="multiple">
+                {% for product in menu %}
+                    <option value="1">{{ product.name }} - {{ product.price }} lv.</option>
+                {% endfor %}
+
+            </select>
+          </div>
+
+          <div class="col-xs-2">
+
+            <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+
+          </div>
+
+          <div class="col-xs-5">
+            <select name="to[]" id="multiselect_to" class="form-control" size="8" multiple="multiple"></select>
+          </div>
+        </div>
+        <script>
+            $('#multiselect').multiselect();
+
+            var arr = [];
+            $('#multiselect option').each(function() {
+              //  console.log($(this).text() + ' ' + $(this).val());
+              arr.push($(this).text());
+            });
+
+
+            $('button').click(function() {
+
+              $("#multiselect").empty();
+              for (var i = 0; i < arr.length; i++) {
+                var node = document.createElement("option");
+                var textnode = document.createTextNode(arr[i]);
+                node.appendChild(textnode);
+                document.getElementById("multiselect").appendChild(node);
+              }
+            });
+        </script>-->
+        <div style="border-radius: 9px;background-image: url('https://cdn.picpng.com/sticky_notes/sticky-notes-background-32122.png');background-size: 100% 100%;width: 40%" >
+
+            <div style="margin: 40px;width: 70%;position: relative;top: 9px">
+                <h4 style="font-family: 'Monaco';font-style: italic">Table Orders:</h4>
+                <div>
+
+                    <p>---------------------</p>
+                    {% if orders %}
+                        {% for order in orders %}
+                            <h5 style="font-family: 'Monaco';font-style: italic">{{ order.product }} lv.</h5>
+                            <a href="{% url 'delete order' order.id %}" class="btn btn-danger" style="width: 37%;font-family: 'Monaco';font-style: italic">Delete order</a>
+                        {% endfor %}
+                    {% else %}
+                        <h5 style="font-family: 'Monaco';font-style: italic">Still no orders for this table!</h5>
+                    {% endif %}
+
+                </div>
+                <div style="position: relative;top: 10px">
+                    <p>---------------------</p>
+                    <h4 style="position: relative;bottom: 10px;font-family: 'Monaco'">BILL: {{ profit }} lv.</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
